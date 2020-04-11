@@ -1,0 +1,109 @@
+div{
+  line-height: 1.4;
+}
+header{
+  position: relative;
+  font-family: 'Abril Fatface';
+  color: #222;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
+}
+
+img{
+  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1{
+  position: absolute;
+  left: 20%;
+  top: 60%;
+  width 100%;
+  text-align: center;
+  font-size: 70px;
+}
+
+h3{
+  position: absolute;
+  left: 20%;
+  top: 55%;
+  width 100%;
+  text-align: center;
+  font-size: 35px;
+}
+
+p{
+  font-family: 'Josefin Sans';
+  font-size: 20px;
+  /*   text-align: center; */
+  color: #222;
+  margin: 70px 23% 20px 23%;
+
+}
+
+ul{
+  font-family: 'Josefin Sans';
+  font-size: 20px;
+  color: #222;
+  margin: 10px 23% 20px 23%;
+  line-height: 1.4;
+  list-style-type: square;
+}
+
+blockquote{
+  background: #222;
+  color: white;
+  font-family: 'Abril Fatface';
+  padding: 40px 10px;
+  font-size: 52px;
+  margin: 50px 20% 40px 20%; 
+}
+
+blockquote::before {
+  content: ',,';
+  position: relative;
+  transform: rotate(180deg);
+  float: left;
+  bottom: 40px;
+  right: 0px;
+  font-size: 100px;
+}
+
+#maradek{
+  color: #222;
+}
+
+h2{
+  font-family: 'Josefin Sans';
+  font-size: 24px;
+  text-transform: uppercase;
+  margin: 20px 23% 30px 23%;
+}
+
+h4{
+  font-family: 'Josefin Sans';
+  font-size: 22px;
+  margin: 20px 23% 30px 23%;
+}
+
+article{
+  font-family: 'Merriweather';
+  font-size: 15px;
+  margin: 20px 23% 30px 23%;
+}
+
+h5{
+  font-family: 'Josefin Sans';
+  font-size: 16px;
+  margin: -20px 23% 30px 23%;
+}
+
+hr{
+  width: 60%;
+  margin-top: 40px;
+  margin-bottom: 50px;
+}
