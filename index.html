@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+l<!DOCTYPE html>
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
@@ -9,11 +9,278 @@
 <body>
 
   <textarea style="width:100%; height:800px" disabled>
-  ************************************************** LOGIN HTML PAGE *************************************************************
-    hmfgj
+  ************************************************** EMBEREK RÖGZÍTÉSE HTML PAGE *************************************************************
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+<title>Bejelentkezés</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="menu">
+	<a class="active" href="/Emberek_rogzitese.html">Emberek rögzítése</a>
+	<a href="/listazo.php">Emberek módosítása/törlése</a>
+	<a href="/Rokoni_kapcsolatok_beallitasa.php">Rokoni kapcsolatok beállítása</a>
+	<a href="/Listazas.php">Listázás</a>
+</div>
+
+<form method="POST" action="Emberek_rogzitese.php">
+	<div class="form-group">
+	  <label for="nev">Név:</label><br>
+	  <input type="text" id="nev" name="nev" class="form-control"><br>
+	</div>
+	<div class="form-group">
+	  <label for="szul_datum">Születési idő:</label><br>
+	  <input type="date" id="szul_datum" name="szul_datum" class="form-control"><br><br>
+	</div>
+	<div class="form-group">
+		<label for="nem">Neme:</label>
+		<select name="nem" class="form-control">
+			<option value=" ">--select--</option>
+			<option value="férfi">férfi</option>
+			<option value="nő">nő</option>
+		</select>
+	</div>
+  <input type="submit" class="btn btn-default" value="Bejelentkezés">
+</form>
+
+<h3>Új fiók készítéséhez kattints ide: <a href="/vizsga/registration.html">Regisztráció</a> </h3>
+
+</body>
+</html>
   
+  ************************************************** EMBEREK RÖGZÍTÉSE PHP PAGE *************************************************************
+    
   
+<div class="menu">
+    <a class="active" href="/Emberek_rogzitese.html">Emberek rögzítése</a>
+    <a href="/listazo.php">Emberek módosítása/törlése</a>
+    <a href="/Rokoni_kapcsolatok_beallitasa.php">Rokoni kapcsolatok beállítása</a>
+    <a href="/Listazas.php">Listázás</a>
+</div>
+
+<?php
+var_dump($_POST);
+$hostname = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'rokonsagi_fokok';
+
+$conn = mysqli_connect($hostname, $username, $password, $database) or die ("Error ".mysqli_error($conn));
+
+
+$nev = $_POST['nev'];
+$szul_datum = $_POST['szul_datum'];
+$nem = $_POST['nem'];
+$a = 0;
+
+if ($nem == "nő"){
+	$a = 1;
+}
+
+
+$q = "SELECT count(*) c FROM emberek WHERE nev= '$nev' AND szul_datum= '$szul_datum' AND nem= '$a';";
+$r = $conn->query($q);
+$x = $r->fetch_assoc();
+if ($x["c"] == 0){
+    $q = "INSERT INTO emberek (nev, szul_datum, nem) VALUES ('$nev', '$szul_datum', '$a');";
+    $r = $conn->query($q);
+    echo 'Adatok sikeresen hozzáadva!';
+}
+else {
+    echo 'Hozzáadás sikertelen! Ez az ember már létezik!';
+}
+
+$conn->close();
+
+?>
+
+   
+    
+    ******************************************************************************* Listázó PHP *************************************************************************
+    
+    <!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Válaszd ki az embert</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<?php
+
+$hostname = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'rokonsagi_fokok';
+
+$conn = mysqli_connect($hostname, $username, $password, $database) or die ("Error ".mysqli_error($conn));
+
+
+$q = "SELECT * FROM emberek;";
+$r = $conn->query($q);
+$emberek = mysqli_fetch_all ($r, MYSQLI_ASSOC);
+var_dump($emberek);
+
+$conn->close();
+?>
+<form method="POST" action="modositas_torles.php">
+    <div class="form-group">
+        <label for="nem">Válaszd ki az embert:</label>
+        <select name="emberid" class="form-control">
+            <?php
+            foreach($emberek as $i){ ?>
+                <option value="<?php echo $i["id"];?>"><?php echo $i["nev"]; ?></option>
+            <?php }
+            ?>
+        </select>
+    </div>
+    <input type="submit" class="btn btn-default" value="Kiválasztás">
+</form>
+
+</body>
+</html>
+    
+
+ ******************************************************************************* Módosítás/törlés PHP *************************************************************************
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Válaszd ki az embert</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<?php
+
+$hostname = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'rokonsagi_fokok';
+
+$conn = mysqli_connect($hostname, $username, $password, $database) or die ("Error ".mysqli_error($conn));
+
+$kivalasztott = $_POST['emberid'];
+$q = "SELECT * FROM emberek WHERE id = $kivalasztott;";
+$r = $conn->query($q);
+$hegylako = mysqli_fetch_assoc ($r);
+$neme = 'férfi';
+if ($hegylako['nem'] == 1){
+    $neme = 'nő';
+}
+var_dump($hegylako);
+
+$conn->close();
+?>
+
+<form method="POST" action="modositas.php">
+    <input style="display:none" type="text" id="id" name="id" class="form-control" value="<?php echo $hegylako['id']; ?>"><br>
+    <div class="form-group">
+        <label for="nev">Név:</label><br>
+        <input type="text" id="nev" name="nev" class="form-control" value="<?php echo $hegylako['nev']; ?>"><br>
+    </div>
+    <div class="form-group">
+        <label for="szul_datum">Születési idő:</label><br>
+        <input type="date" id="szul_datum" name="szul_datum" class="form-control" value="<?php echo $hegylako['szul_datum']; ?>"><br><br>
+    </div>
+    <div class="form-group">
+        <label for="nem">Neme:</label>
+        <select name="nem" class="form-control">
+            <option <?php if ($neme == 'férfi') { echo 'selected';} ?> value="férfi">férfi</option>
+            <option <?php if ($neme == 'nő') { echo 'selected';} ?> value="nő">nő</option>
+        </select>
+    </div>
+    <input type="submit" class="btn btn-default" value="Módosítás">
+</form>
+
+<form method="POST" action="torles.php">
+    <input style="display:none" type="text" id="id" name="id" class="form-control" value="<?php echo $hegylako['id']; ?>"><br>
+    <input type="submit" class="btn btn-default" value="Törlés">
+</form>
+
+</body>
+</html>
   
+  ******************************************************************************* Módosítás PHP *************************************************************************
+ 
+
+<div class="menu">
+    <a class="active" href="/Emberek_rogzitese.html">Emberek rögzítése</a>
+    <a href="/listazo.php">Emberek módosítása/törlése</a>
+    <a href="/Rokoni_kapcsolatok_beallitasa.php">Rokoni kapcsolatok beállítása</a>
+    <a href="/Listazas.php">Listázás</a>
+</div>
+
+<?php
+var_dump($_POST);
+$hostname = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'rokonsagi_fokok';
+
+$conn = mysqli_connect($hostname, $username, $password, $database) or die ("Error ".mysqli_error($conn));
+
+
+$nev = $_POST['nev'];
+$szul_datum = $_POST['szul_datum'];
+$nem = $_POST['nem'];
+$emberid =$_POST['id'];
+$a = 0;
+
+if ($nem == "nő"){
+    $a = 1;
+}
+
+$q = "UPDATE emberek SET nev = '$nev', szul_datum = '$szul_datum', nem = '$a' WHERE id = '$emberid';";
+$r = $conn->query($q);
+$conn->close();
+
+?>
+
+  
+   ******************************************************************************* Törlés PHP *************************************************************************
+ 
+  
+
+<div class="menu">
+    <a class="active" href="/Emberek_rogzitese.html">Emberek rögzítése</a>
+    <a href="/listazo.php">Emberek módosítása/törlése</a>
+    <a href="/Rokoni_kapcsolatok_beallitasa.php">Rokoni kapcsolatok beállítása</a>
+    <a href="/Listazas.php">Listázás</a>
+</div>
+
+<?php
+var_dump($_POST);
+$hostname = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'rokonsagi_fokok';
+
+$conn = mysqli_connect($hostname, $username, $password, $database) or die ("Error ".mysqli_error($conn));
+
+
+$emberid =$_POST['id'];
+
+
+$q = "DELETE FROM emberek WHERE id = $emberid;";
+$r = $conn->query($q);
+$conn->close();
+
+?>
+
+
+    
+    
+
   
   </textarea>
   
